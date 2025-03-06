@@ -3,23 +3,22 @@ import { inject, Injectable } from '@angular/core';
 import { Pagination } from '../../shared/models/pagination';
 import { Product } from '../../shared/models/product';
 import { ShopParams } from '../../shared/models/shopParams';
-
 @Injectable({
   providedIn: 'root',
 })
 export class ShopService {
   baseUrl = 'https://localhost:5001/api/';
+  private http = inject(HttpClient);
   brands: string[] = [];
   types: string[] = [];
-  private http = inject(HttpClient);
 
   getProducts(shopParams: ShopParams) {
     let params = new HttpParams();
 
-    if (shopParams.brands && shopParams.brands.length > 0) {
+    if (shopParams.brands.length > 0) {
       params = params.append('brands', shopParams.brands.join(','));
     }
-    if (shopParams.types && shopParams.types.length > 0) {
+    if (shopParams.types.length > 0) {
       params = params.append('types', shopParams.types.join(','));
     }
 
@@ -37,6 +36,10 @@ export class ShopService {
     return this.http.get<Pagination<Product>>(this.baseUrl + 'products', {
       params,
     });
+  }
+
+  getProduct(id: number) {
+    return this.http.get<Product>(this.baseUrl + 'products/' + id);
   }
 
   getTypes() {

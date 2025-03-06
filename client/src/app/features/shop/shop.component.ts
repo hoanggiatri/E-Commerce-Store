@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, InjectionToken, OnInit } from '@angular/core';
 import { ShopService } from '../../core/services/shop.service';
 import { Product } from '../../shared/models/product';
 import { MatCard } from '@angular/material/card';
@@ -9,30 +9,39 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import {
+  MatListModule,
   MatListOption,
   MatSelectionList,
   MatSelectionListChange,
 } from '@angular/material/list';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ShopParams } from '../../shared/models/shopParams';
 import { Pagination } from '../../shared/models/pagination';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+export const SELECTION_LIST_TOKEN = new InjectionToken<any>('SelectionList');
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [
+    CommonModule,
     ProductItemComponent,
     MatButton,
     MatIcon,
     MatMenuTrigger,
     MatMenu,
+    MatListModule,
     MatSelectionList,
     MatListOption,
-    MatPaginatorModule,
+    MatPaginator,
     FormsModule,
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
+  providers: [
+    { provide: SELECTION_LIST_TOKEN, useValue: [] }, // Provide the token here with an appropriate value
+  ],
 })
 export class ShopComponent implements OnInit {
   private ShopService = inject(ShopService);
@@ -54,6 +63,7 @@ export class ShopComponent implements OnInit {
   initializeShop() {
     this.ShopService.getTypes();
     this.ShopService.getBrands();
+    this.getProducts();
   }
 
   getProducts() {
@@ -76,7 +86,7 @@ export class ShopComponent implements OnInit {
 
   onSortChange(event: MatSelectionListChange) {
     const selectedOption = event.options[0];
-    if (selectedOption.selected) {
+    if (selectedOption) {
       this.shopParams.sort = selectedOption.value;
       this.shopParams.pageNumber = 1;
       this.getProducts();
@@ -94,7 +104,6 @@ export class ShopComponent implements OnInit {
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (result) {
-          console.log(result);
           this.shopParams.brands = result.selectedBrands;
           this.shopParams.types = result.selectedTypes;
           this.shopParams.pageNumber = 1;

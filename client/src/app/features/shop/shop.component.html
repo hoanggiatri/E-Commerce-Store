@@ -1,44 +1,80 @@
-<div class="flex flex-col-3 gap-3">
-  <div class="flex justify-beetween">
-    <mat-paginator class="bg-white" (page)="handlePageEvent($event)" [length]="products?.count"
-      [pageSize]="shopParams.pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="true"
-      [pageIndex]="shopParams.pageNumber - 1" aria-label="Select Page">
+@if(products){
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-4">
+    <mat-paginator
+      class="bg-white"
+      (page)="handlePageEvent($event)"
+      [length]="products.count"
+      [pageSize]="shopParams.pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="true"
+      [pageIndex]="shopParams.pageNumber - 1"
+      aria-label="Select Page"
+    >
     </mat-paginator>
 
-    <form #searchForm="ngForm" (ngSubmit)="onSearchChange()" class="relative flex items-center w-full max-w-md mx-4">
-      <input type="search"
+    <form
+      #searchForm="ngForm"
+      (ngSubmit)="onSearchChange()"
+      class="relative flex items-center w-full max-w-md mx-4"
+    >
+      <input
+        type="search"
         class="block w-full p-4 text-sm text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300 focus:border-indigo-300"
-        placeholder="Search products..." [(ngModel)]="shopParams.search" name="search" />
-      <button type="submit" class="absolute inset-y-0 right-8 top-2 flex items-center pl-3" mat-icon-button>
+        placeholder="Search products..."
+        [(ngModel)]="shopParams.search"
+        name="search"
+      />
+      <button
+        type="submit"
+        class="absolute inset-y-0 right-8 top-2 flex items-center pl-3"
+        mat-icon-button
+      >
         <mat-icon>search</mat-icon>
       </button>
     </form>
 
     <div class="flex gap-3">
-      <button class="match-input-height" mat-stroked-button (click)="openFiltersDialog()">
+      <button
+        class="match-input-height"
+        mat-stroked-button
+        (click)="openFiltersDialog()"
+      >
         <mat-icon>filter_list</mat-icon>
         Filters
       </button>
-      <button class="match-input-height" mat-stroked-button [mat-menu-trigger-for]="sortMenu">
+      <button
+        class="match-input-height"
+        mat-stroked-button
+        [mat-menu-trigger-for]="sortMenu"
+      >
         <mat-icon>swap_vert</mat-icon>
         Sort
       </button>
     </div>
-
-
   </div>
-  <div class="grid grid-cols-5 gap-4">
-    @for (product of products?.data; track product.id) {
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+  >
+    @for (product of products.data; track product.id) {
     <app-product-item [product]="product"></app-product-item>
     }
   </div>
 </div>
 
 <mat-menu #sortMenu="matMenu">
-  <mat-selection-list [multiple]="false" (selectionChange)="onSortChange($event)"></mat-selection-list>
-  @for (sort of sortOptions; track $index) {
-  <mat-list-option [value]="sort.value" [selected]="shopParams.sort === sort.value">
-    {{sort.name}}
-  </mat-list-option>
-  }
+  <mat-selection-list
+    [multiple]="false"
+    (selectionChange)="onSortChange($event)"
+  >
+    @for (sort of sortOptions; track $index) {
+    <mat-list-option
+      [value]="sort.value"
+      [selected]="shopParams.sort === sort.value"
+    >
+      {{ sort.name }}
+    </mat-list-option>
+    }
+  </mat-selection-list>
 </mat-menu>
+}

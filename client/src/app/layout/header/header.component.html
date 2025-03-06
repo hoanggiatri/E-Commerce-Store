@@ -2,11 +2,27 @@
   <div
     class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto"
   >
-    <img src="/images/logo.png" alt="app logo" class="max-h-16" />
+    <img
+      routerLink="/"
+      src="/images/logo.png"
+      alt="app logo"
+      class="max-h-16 cursor-pointer"
+    />
     <nav class="flex gap-3 my-2 uppercase text-xl">
-      <a href="#" class="hover:text-blue-500">Home</a>
-      <a>Shop</a>
-      <a>Contact</a>
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="hover:text-blue-500"
+        >Home</a
+      >
+      <a
+        routerLink="/shop"
+        routerLinkActive="active"
+        class="hover:text-blue-500"
+        >Shop</a
+      >
+      <a class="hover:text-blue-500">Contact</a>
     </nav>
     <nav class="flex gap-3 align-middle">
       <a matBadge="5" matBadheSize="large" class="custom-badge mt-2 mr-2">

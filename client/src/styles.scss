@@ -18,7 +18,7 @@ $customTheme: mat.define-theme();
 }
 
 .container{
-  @apply mx-auto max-w-screen-2xl
+  @apply mx-auto max-w-screen-2xl px-2
 }
 
 .text-primary{
@@ -27,4 +27,9 @@ $customTheme: mat.define-theme();
 
 button.match-input-height{
   height: var(--mat-form-field-container-height) !important;
+}
+
+.mdc-notched-outline__notch{
+  border-right-style: none !important;
+
 }
