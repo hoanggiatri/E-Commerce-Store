@@ -54,7 +54,7 @@ namespace API.Controllers
         {
             if (User.Identity?.IsAuthenticated == false) return NoContent();
 
-            var user = await signInManager.UserManager.GetUserByEmail(User);
+            var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
 
             return Ok(new
             {
@@ -65,7 +65,7 @@ namespace API.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("auth-status")]
         public ActionResult GetAuthState()
         {
             return Ok(new
