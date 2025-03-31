@@ -41,7 +41,6 @@ import { OrderService } from '../../core/services/order.service';
     CheckoutReviewComponent,
     CurrencyPipe,
     MatProgressSpinnerModule,
-    JsonPipe,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
