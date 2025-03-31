@@ -1,10 +1,12 @@
 using API.Middlewares;
+using API.SignalR;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +33,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddEntityFrameworkStores<StoreContext>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
-
+builder.Services.AddSignalR();
 
 
 var app = builder.Build();
@@ -39,13 +41,49 @@ var app = builder.Build();
 //Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials()
-    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+app.UseCors(x => x
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins(
+        "https://localhost:4200",
+        "http://localhost:4200",
+        "https://localhost:5001",
+        "http://localhost:5001"
+    ));
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = ""
+});
+
+// Configure static files middleware
+app.UseStaticFiles(); // Default wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "browser")),
+    RequestPath = ""
+});
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<AppUser>(); //   api/login
+app.MapHub<NotificationHub>("/hub/notifications");
 
+app.MapFallbackToController("Index", "Fallback");
 
 try
 {

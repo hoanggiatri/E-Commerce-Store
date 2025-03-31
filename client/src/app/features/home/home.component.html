@@ -1,1 +1,125 @@
-<p>home works!</p>
+<div class="max-w-screen-2xl mx-auto px-4">
+  <!-- Hero Section -->
+  <div class="relative h-[600px] mt-20 rounded-2xl overflow-hidden">
+    <img
+      class="absolute inset-0 w-full h-full object-cover brightness-75"
+      src="../images/hero1.jpg"
+      alt="hero image"
+    />
+    <div
+      class="relative h-full flex flex-col items-center justify-center text-center p-8"
+    >
+      <h1 class="text-7xl font-bold text-white mb-6 drop-shadow-lg">
+        Welcome to HGT Shop
+      </h1>
+      <p class="text-xl text-white mb-8 max-w-2xl drop-shadow-md">
+        Discover our collection of high-quality products at amazing prices. Shop
+        the latest trends and best deals.
+      </p>
+      <button
+        class="bg-white text-gray-900 hover:bg-gray-100 transition-all px-8 py-4 rounded-full text-lg font-semibold"
+        routerLink="/shop"
+      >
+        Shop Now
+      </button>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="grid md:grid-cols-3 gap-8 my-20">
+    <div
+      class="flex flex-col items-center text-center p-6 rounded-lg bg-white shadow-lg"
+    >
+      <i class="fas fa-truck text-4xl text-blue-600 mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">Free Shipping</h3>
+      <p class="text-gray-600">On orders over $100</p>
+    </div>
+    <div
+      class="flex flex-col items-center text-center p-6 rounded-lg bg-white shadow-lg"
+    >
+      <i class="fas fa-undo text-4xl text-blue-600 mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">Easy Returns</h3>
+      <p class="text-gray-600">30 day return policy</p>
+    </div>
+    <div
+      class="flex flex-col items-center text-center p-6 rounded-lg bg-white shadow-lg"
+    >
+      <i class="fas fa-headset text-4xl text-blue-600 mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">24/7 Support</h3>
+      <p class="text-gray-600">Customer service support</p>
+    </div>
+  </div>
+
+  <!-- Featured Categories -->
+  <div class="my-20">
+    <h2 class="text-3xl font-bold text-center mb-12">Featured Categories</h2>
+    <div class="grid md:grid-cols-4 gap-8">
+      <div class="group relative rounded-xl overflow-hidden cursor-pointer">
+        <img
+          src="../images/products/boot-ang1.png"
+          alt="category"
+          class="w-full h-64 object-cover transition-transform group-hover:scale-110"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end"
+        >
+          <h3 class="text-white text-xl font-semibold p-6">Boots</h3>
+        </div>
+      </div>
+      <div class="group relative rounded-xl overflow-hidden cursor-pointer">
+        <img
+          src="../images/products/glove-code1.png"
+          alt="category"
+          class="w-full h-64 object-cover transition-transform group-hover:scale-110"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end"
+        >
+          <h3 class="text-white text-xl font-semibold p-6">Gloves</h3>
+        </div>
+      </div>
+      <div class="group relative rounded-xl overflow-hidden cursor-pointer">
+        <img
+          src="../images/products/hat-core1.png"
+          alt="category"
+          class="w-full h-64 object-cover transition-transform group-hover:scale-110"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end"
+        >
+          <h3 class="text-white text-xl font-semibold p-6">Hats</h3>
+        </div>
+      </div>
+      <div class="group relative rounded-xl overflow-hidden cursor-pointer">
+        <img
+          src="../images/products/sb-ang1.png"
+          alt="category"
+          class="w-full h-64 object-cover transition-transform group-hover:scale-110"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end"
+        >
+          <h3 class="text-white text-xl font-semibold p-6">Skate board</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Media Section -->
+  <div class="bg-gray-100 rounded-2xl p-12 my-20 text-center">
+    <h2 class="text-3xl font-bold mb-4">Connect With Us</h2>
+    <p class="text-gray-600 mb-8">
+      Follow us on Facebook for updates and special offers
+    </p>
+    <div class="flex justify-center">
+      <a
+        href="https://www.facebook.com/profile.php?id=100057371152575"
+        target="_blank"
+        class="inline-flex items-center gap-2 bg-[#1877f2] text-white px-8 py-4 rounded-lg hover:bg-[#0d6efd] transition-colors"
+      >
+        <i class="fab fa-facebook-f text-xl"></i>
+        <span class="font-semibold">Visit Our Facebook Page</span>
+      </a>
+    </div>
+  </div>
+</div>

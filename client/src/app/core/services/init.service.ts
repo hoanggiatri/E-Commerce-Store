@@ -1,8 +1,9 @@
 import { PLATFORM_ID, inject, Injectable } from '@angular/core';
 import { CartService } from './cart.service';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { AccountService } from './account.service';
+import { SignalrService } from './signalr.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class InitService {
   private cartService = inject(CartService);
   private platformId = inject(PLATFORM_ID);
   private accountService = inject(AccountService);
+  private signalrService = inject(SignalrService);
 
   init() {
     if (isPlatformBrowser(this.platformId)) {
@@ -19,7 +21,11 @@ export class InitService {
 
       return forkJoin({
         cart: cart$,
-        user: this.accountService.getUserInfo(),
+        user: this.accountService.getUserInfo().pipe(
+          tap((user) => {
+            if (user) this.signalrService.createHubConnection();
+          })
+        ),
       });
     }
     return of(null);
