@@ -19,6 +19,7 @@ import { ShopParams } from '../../shared/models/shopParams';
 import { Pagination } from '../../shared/models/pagination';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 
 export const SELECTION_LIST_TOKEN = new InjectionToken<any>('SelectionList');
 @Component({
@@ -36,6 +37,7 @@ export const SELECTION_LIST_TOKEN = new InjectionToken<any>('SelectionList');
     MatListOption,
     MatPaginator,
     FormsModule,
+    EmptyStateComponent,
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
@@ -63,6 +65,11 @@ export class ShopComponent implements OnInit {
   initializeShop() {
     this.ShopService.getTypes();
     this.ShopService.getBrands();
+    this.getProducts();
+  }
+
+  resetFilters() {
+    this.shopParams = new ShopParams();
     this.getProducts();
   }
 
