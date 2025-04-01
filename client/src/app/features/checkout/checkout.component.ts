@@ -18,8 +18,8 @@ import {
 } from '@angular/material/checkbox';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Address } from '../../shared/models/user';
-import { AccountService } from '../../core/services/account.service';
 import { firstValueFrom } from 'rxjs';
+import { AccountService } from '../../core/services/account.service';
 import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery.component';
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 import { CartService } from '../../core/services/cart.service';
@@ -40,18 +40,19 @@ import { OrderService } from '../../core/services/order.service';
     CheckoutDeliveryComponent,
     CheckoutReviewComponent,
     CurrencyPipe,
+    JsonPipe,
     MatProgressSpinnerModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
   private stripeService = inject(StripeService);
   private snackbar = inject(SnackbarService);
+  private router = inject(Router);
   private accountService = inject(AccountService);
   private orderService = inject(OrderService);
-  cartSerivce = inject(CartService);
+  cartService = inject(CartService);
   addressElement?: StripeAddressElement;
   paymentElement?: StripePaymentElement;
   saveAddress = false;
@@ -62,11 +63,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }>({ address: false, card: false, delivery: false });
   confirmationToken?: ConfirmationToken;
   loading = false;
-
-  constructor() {
-    this.handleAddressChange = this.handleAddressChange.bind(this);
-    this.handlePaymentChange = this.handlePaymentChange.bind(this);
-  }
 
   async ngOnInit() {
     try {
@@ -82,19 +78,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleAddressChange(event: StripeAddressElementChangeEvent) {
+  handleAddressChange = (event: StripeAddressElementChangeEvent) => {
     this.completionStatus.update((state) => {
       state.address = event.complete;
       return state;
     });
-  }
+  };
 
-  handlePaymentChange(event: StripePaymentElementChangeEvent) {
+  handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
     this.completionStatus.update((state) => {
       state.card = event.complete;
       return state;
     });
-  }
+  };
 
   handleDeliveryChange(event: boolean) {
     this.completionStatus.update((state) => {
@@ -137,7 +133,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   async confirmPayment(stepper: MatStepper) {
     this.loading = true;
-
     try {
       if (this.confirmationToken) {
         const result = await this.stripeService.confirmPayment(
@@ -151,8 +146,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           );
           if (orderResult) {
             this.orderService.orderComplete = true;
-            this.cartSerivce.deleteCart();
-            this.cartSerivce.selectedDelivery.set(null);
+            this.cartService.deleteCart();
+            this.cartService.selectedDelivery.set(null);
             this.router.navigateByUrl('/checkout/success');
           } else {
             throw new Error('Order creation failed');
@@ -160,7 +155,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         } else if (result.error) {
           throw new Error(result.error.message);
         } else {
-          throw new Error('Somthing went wrong');
+          throw new Error('Something went wrong');
         }
       }
     } catch (error: any) {
@@ -172,13 +167,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private async createOrderModel(): Promise<OrderToCreate> {
-    const cart = this.cartSerivce.cart();
+    const cart = this.cartService.cart();
     const shippingAddress =
       (await this.getAddressFromStripeAddress()) as ShippingAddress;
-
     const card = this.confirmationToken?.payment_method_preview.card;
 
-    if (!cart?.id || !cart.deliveryMethodId || !shippingAddress || !card) {
+    if (!cart?.id || !cart.deliveryMethodId || !card || !shippingAddress) {
       throw new Error('Problem creating order');
     }
 
@@ -192,6 +186,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       },
       deliveryMethodId: cart.deliveryMethodId,
       shippingAddress,
+      discount: this.cartService.totals()?.discount,
     };
   }
 
@@ -207,8 +202,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         line1: address.line1,
         line2: address.line2 || undefined,
         city: address.city,
-        state: address.state,
         country: address.country,
+        state: address.state,
         postalCode: address.postal_code,
       };
     } else return null;
