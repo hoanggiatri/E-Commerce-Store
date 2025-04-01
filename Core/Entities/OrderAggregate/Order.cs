@@ -1,8 +1,8 @@
-using System;
+using Core.Interfaces;
 
 namespace Core.Entities.OrderAggregate;
 
-public class Order : BaseEntity
+public class Order : BaseEntity, IDtoConvertible
 {
   public DateTime OrderDate { get; set; } = DateTime.UtcNow;
   public required string BuyerEmail { get; set; }
@@ -14,6 +14,7 @@ public class Order : BaseEntity
   public decimal Discount { get; set; }
   public OrderStatus Status { get; set; } = OrderStatus.Pending;
   public required string PaymentIntentId { get; set; }
+
   public decimal GetTotal()
   {
     return Subtotal - Discount + DeliveryMethod.Price;
