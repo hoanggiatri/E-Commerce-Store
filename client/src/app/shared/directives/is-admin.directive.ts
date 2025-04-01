@@ -1,5 +1,6 @@
 import {
   Directive,
+  effect,
   inject,
   OnInit,
   TemplateRef,
@@ -8,20 +9,21 @@ import {
 import { AccountService } from '../../core/services/account.service';
 
 @Directive({
-  selector: '[appIsAdmin]', //*appIsAdmin
+  selector: '[appIsAdmin]', // *appIsAdmin
   standalone: true,
 })
-export class IsAdminDirective implements OnInit {
+export class IsAdminDirective {
   private accountService = inject(AccountService);
   private viewContainerRef = inject(ViewContainerRef);
   private templateRef = inject(TemplateRef);
 
-  constructor() {}
-  ngOnInit(): void {
-    if (this.accountService.isAdmin()) {
-      this.viewContainerRef.createEmbeddedView(this.templateRef);
-    } else {
-      this.viewContainerRef.clear();
-    }
+  constructor() {
+    effect(() => {
+      if (this.accountService.isAdmin()) {
+        this.viewContainerRef.createEmbeddedView(this.templateRef);
+      } else {
+        this.viewContainerRef.clear();
+      }
+    });
   }
 }
