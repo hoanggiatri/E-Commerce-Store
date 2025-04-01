@@ -1,28 +1,27 @@
-using System;
 using Core.Entities;
 
 namespace Core.Specifications;
 
 public class ProductSpecification : BaseSpecification<Product>
 {
-  public ProductSpecification(ProductPrecParams specParams)
-    : base(p =>
-      (string.IsNullOrEmpty(specParams.Search) || p.Name.ToLower().Contains(specParams.Search)) &&
-      (specParams.Brands.Count == 0 || specParams.Brands.Contains(p.Brand)) &&
-      (specParams.Types.Count == 0 || specParams.Types.Contains(p.Type)))
+  public ProductSpecification(ProductSpecParams specParams) : base(x =>
+      (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
+      (specParams.Brands.Count == 0 || specParams.Brands.Contains(x.Brand)) &&
+      (specParams.Types.Count == 0 || specParams.Types.Contains(x.Type))
+  )
   {
     ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
 
     switch (specParams.Sort)
     {
       case "priceAsc":
-        AddOrderBy(p => p.Price);
+        AddOrderBy(x => x.Price);
         break;
       case "priceDesc":
-        AddOrderByDescending(p => p.Price);
+        AddOrderByDescending(x => x.Price);
         break;
       default:
-        AddOrderBy(p => p.Name);
+        AddOrderBy(x => x.Name);
         break;
     }
   }

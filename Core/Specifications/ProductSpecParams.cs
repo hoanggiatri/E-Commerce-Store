@@ -1,8 +1,6 @@
-using System;
-
 namespace Core.Specifications;
 
-public class ProductPrecParams : PagingParams
+public class ProductSpecParams : PagingParams
 {
   private List<string> _brands = [];
   public List<string> Brands
@@ -34,5 +32,6 @@ public class ProductPrecParams : PagingParams
     get => _search ?? "";
     set => _search = value.ToLower();
   }
+
 
 }

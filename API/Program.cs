@@ -29,6 +29,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
     return ConnectionMultiplexer.Connect(configuration);
 });
 builder.Services.AddSingleton<ICartService, CartService>();
+builder.Services.AddSingleton<IResponseCacheService, ResponseCacheService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>()
@@ -40,6 +41,7 @@ builder.Services.AddSignalR();
 
 
 var app = builder.Build();
+
 
 //Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
