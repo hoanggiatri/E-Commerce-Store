@@ -7,11 +7,13 @@ import { ServerErrorComponent } from './shared/components/server-error/server-er
 import { CartComponent } from './features/cart/cart.component';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { AboutComponent } from './features/about/about.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'shop', component: ShopComponent },
   { path: 'shop/:id', component: ProductDetailsComponent },
+  { path: 'about', component: AboutComponent },
   { path: 'cart', component: CartComponent },
   {
     path: 'checkout',
